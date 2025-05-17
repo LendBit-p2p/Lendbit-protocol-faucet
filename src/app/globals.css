@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --base-green: #00d395;
+  --midnight-blue: #12151a;
+  --cool-gray: #b0bec5;
+  --neon-cyan: #00f5ff;
+  --electric-purple: #a66cff;
+  --solar-orange: #ff8c42;
+  --dark-background: #0a0b0d;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  color: #ffffff;
+  background: var(--dark-background);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dark-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Custom styling for placeholders */
+::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Glowing effect for accented elements */
+.glow {
+  box-shadow: 0 0 15px rgba(0, 211, 149, 0.3);
+}
+
+/* Custom animations */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Improved button focus states */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--base-green);
+  outline-offset: 2px;
+}

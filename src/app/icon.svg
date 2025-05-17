@@ -1,0 +1,11 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="60" fill="#000"/>
+  <g stroke="#fff" stroke-width="20" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Top hexagon -->
+    <polygon points="256,96 336,142 336,234 256,280 176,234 176,142" fill="none"/>
+    <!-- Bottom left hexagon -->
+    <polygon points="128,222 208,268 208,360 128,406 48,360 48,268" fill="none" transform="translate(80,76)"/>
+    <!-- Bottom right hexagon -->
+    <polygon points="384,222 464,268 464,360 384,406 304,360 304,268" fill="none" transform="translate(-80,76)"/>
+  </g>
+</svg>
