@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'vProtocol | Testnet Faucet',
+  title: 'Lendbit | Testnet Faucet',
   description: 'Get testnet tokens for Five Protocol',
 };
 
