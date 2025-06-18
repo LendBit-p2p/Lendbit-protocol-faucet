@@ -1,4 +1,14 @@
+import { sep } from "path";
+
 export const FAUCET_ADDRESS = process.env.NEXT_PUBLIC_FAUCET_ADDRESS;
+
+
+interface ChainInfo {
+  name: string;
+  icon: string;
+  color: string;
+}
+
 
 export interface TokenInfo {
   name: string;
@@ -27,17 +37,28 @@ export const COLORS = {
   lightGray: "#F7F9FA",
 };
 
+
+  export const getChainTokenSymbol = (tokenSymbol: string, chain: Chain): string => {
+    const tokenMap: Record<Chain, Record<string, string>> = {
+      'base_sepolia': {
+        'DAI': 'ETH_DAI',
+        'LINK': 'ETH_LINK'
+      },
+      'arbitrum_sepolia': {
+        'DAI': 'ARB_DAI', 
+        'LINK': 'ARB_LINK'
+      },
+      'optimism_sepolia': {
+        'DAI': 'OP_DAI',
+        'LINK': 'OP_LINK'
+      }
+    };
+    return tokenMap[chain]?.[tokenSymbol] || `${chain.toUpperCase().split('_')[0]}_${tokenSymbol}`;
+  };
+
 export const TOKENS: Record<string, TokenInfo> = {
-  WETH: {
-    name: "Wrapped Ether",
-    amount: "0.1",
-    color: "bg-yellow-500 hover:bg-yellow-600",
-    icon: "♦",
-    symbol: "WETH",
-    address: "0xAB6015514c40F5B0bb583f28c0819cA79e3B9415",
-    decimals: 18,
-    logoURI: "https://five-protocol-faucet.vercel.app/tokens/ETH.svg",
-  },
+
+
   LINK: {
     name: "Chainlink",
     amount: "25",
@@ -48,19 +69,9 @@ export const TOKENS: Record<string, TokenInfo> = {
     decimals: 18,
     logoURI: "https://five-protocol-faucet.vercel.app/tokens/LINK.svg",
   },
-  USDT: {
-    name: "USD Tether",
-    amount: "100",
-    color: "bg-blue-500 hover:bg-blue-600",
-    icon: "💵",
-    symbol: "USDT",
-    address: "0x00D1C02E008D594ebEFe3F3b7fd175850f96AEa0",
-    decimals: 6,
-    logoURI: "https://five-protocol-faucet.vercel.app/tokens/USDT.svg",
-  },
   DAI: {
     name: "Dai Stablecoin",
-    amount: "100",
+    amount: "10",
     color: "bg-yellow-400 hover:bg-yellow-500",
     icon: "💱",
     symbol: "DAI",
@@ -70,13 +81,60 @@ export const TOKENS: Record<string, TokenInfo> = {
   },
 };
 
-export const NETWORK = {
-  name: "Base Sepolia",
-  chainId: 84532,
-  rpcUrl: "https://sepolia.base.org",
-  blockExplorer: "https://base-sepolia.blockscout.com/",
-  blockExplorerName: "BaseScan",
+ // Supported chains
+ export const SUPPORTED_CHAINS: Record<Chain, ChainInfo> = {
+  'base_sepolia': {
+    name: 'Base Sepolia',
+    icon: '🔵',
+    color: '#0052FF'
+  },
+  'arbitrum_sepolia': {
+    name: 'Arbitrum Sepolia', 
+    icon: '🔶',
+    color: '#12AAFF'
+  },
+  'optimism_sepolia': {
+    name: 'Optimism Sepolia',
+    icon: '🔴', 
+    color: '#FF0420'
+  }
 };
+
+
+// utils/constants.ts
+
+export const NETWORKS = {
+
+  base_sepolia: {
+    name: "Base Sepolia",
+    chainId: Number(process.env.NEXT_PUBLIC_BASE_CHAIN_ID),
+    rpcUrl: process.env.NEXT_PUBLIC_BASE_RPC_URL as string,
+    blockExplorer: "https://base-sepolia.blockscout.com/",
+    faucetAddress: process.env.NEXT_PUBLIC_BASE_FAUCET_ADDRESS,
+    blockExplorerName: "BaseScan",
+  },
+
+  arbitrum_sepolia: {
+    name: "Arbitrum Sepolia",
+    chainId: Number(process.env.NEXT_PUBLIC_ARBITRUM_CHAIN_ID),
+    rpcUrl: process.env.NEXT_PUBLIC_ARBITRUM_RPC_URL as string,
+    blockExplorer: "https://sepolia-explorer.arbitrum.io/",
+    faucetAddress: process.env.NEXT_PUBLIC_ARBITRUM_FAUCET_ADDRESS,
+    blockExplorerName: "Arbiscan",
+  },
+  
+  optimism_sepolia: {
+    name: "Optimism Sepolia",
+    chainId: Number(process.env.NEXT_PUBLIC_OPTIMISM_CHAIN_ID),
+    rpcUrl: process.env.NEXT_PUBLIC_OPTIMISM_RPC_URL as string,
+    blockExplorer: "https://sepolia-optimistic.etherscan.io/",
+    faucetAddress: process.env.NEXT_PUBLIC_OPTIMISM_FAUCET_ADDRESS,
+    blockExplorerName: "Optimism Explorer",
+  },
+};
+
+export type Chain = keyof typeof NETWORKS;
+
 
 export function getWatchAssetParams(tokenSymbol: string) {
   const token = TOKENS[tokenSymbol];

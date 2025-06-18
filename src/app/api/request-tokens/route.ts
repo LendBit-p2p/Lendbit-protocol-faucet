@@ -1,37 +1,47 @@
+// app/api/faucet/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { getFaucetContract, getProvider } from "../../../utils/ethers";
-import { NETWORK } from "@/utils/constants";
+import { getFaucetContract } from "../../../utils/ethers";
+import { Chain, NETWORKS,  } from "@/utils/constants";
+import { isAddress } from "ethers";
 
 // Define the request body type
 interface RequestBody {
   recipientAddress: string;
   tokenSymbol: string;
+  chain: Chain;
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body: RequestBody = await request.json();
-    const { recipientAddress, tokenSymbol } = body;
+    const { recipientAddress, tokenSymbol, chain } = body;
 
     // Basic validation
-    if (!recipientAddress || !tokenSymbol) {
+    if (!recipientAddress || !tokenSymbol || !chain) {
       return NextResponse.json(
         { error: "Missing required parameters" },
         { status: 400 }
       );
     }
 
-    // Load private key from environment variable
-    const privateKey = process.env.FAUCET_PRIVATE_KEY;
-    if (!privateKey) {
+    // Validate chain
+    if (!NETWORKS[chain]) {
       return NextResponse.json(
-        { error: "Server configuration error" },
-        { status: 500 }
+        { error: `Unsupported chain: ${chain}` },
+        { status: 400 }
       );
     }
 
-    // Get faucet contract
-    const faucetContract = await getFaucetContract(privateKey);
+    // Validate address format
+    if (!isAddress(recipientAddress)) {
+      return NextResponse.json(
+        { error: "Invalid recipient address" },
+        { status: 400 }
+      );
+    }
+
+    // Get faucet contract for the selected chain
+    const faucetContract = await getFaucetContract(chain);
 
     // Check if user can request tokens (not in cooldown)
     try {
@@ -39,22 +49,22 @@ export async function POST(request: NextRequest) {
         recipientAddress,
         tokenSymbol
       );
-      console.log("canRequest", canRequest);
+
+      console.log("canRequestToken result:", canRequest);
       if (!canRequest) {
         const waitTime = await faucetContract.timeUntilNextRequest(
           recipientAddress,
           tokenSymbol
         );
-        const waitTimeMinutes = Math.ceil(Number(waitTime) / 60);
+        const waitMinutes = Math.ceil(Number(waitTime) / 60);
         return NextResponse.json(
           {
-            error: `Please wait approximately ${waitTimeMinutes} minutes before requesting ${tokenSymbol} again.`,
+            error: `Please wait approximately ${waitMinutes} minutes before requesting ${tokenSymbol} again on ${NETWORKS[chain].name}.`,
           },
           { status: 429 }
         );
       }
     } catch (error) {
-      console.log("Error checking request eligibility:", error);
       console.error("Error checking request eligibility:", error);
       return NextResponse.json(
         { error: "Failed to check request eligibility" },
@@ -63,23 +73,21 @@ export async function POST(request: NextRequest) {
     }
 
     // Send transaction
-    const tx = await faucetContract.requestTokens(
-      recipientAddress,
-      tokenSymbol
-    );
+    const tx = await faucetContract.requestTokens(recipientAddress, tokenSymbol);
 
     // Wait for transaction to be mined
     const receipt = await tx.wait();
 
-    // Return transaction hash
+    // Return transaction hash and chain
     return NextResponse.json({
       success: true,
       txHash: receipt.transactionHash,
+      chain,
     });
   } catch (error: any) {
     console.error("Error processing token request:", error);
     return NextResponse.json(
-      { error: "Failed to process token request", details: error.message },
+      { error: "Failed to process token request" }, // Removed details for security
       { status: 500 }
     );
   }
