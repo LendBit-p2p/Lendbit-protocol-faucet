@@ -12,7 +12,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: 'Lendbit | Testnet Faucet',
-  description: 'Get testnet tokens for Five Protocol',
+  description: 'Get testnet tokens for Lendbit Finance',
 };
 
 export default function RootLayout({
