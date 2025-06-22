@@ -60,7 +60,7 @@ const TokenFaucet: React.FC = () => {
       color: "#F5AC37",
       icon: "💰",
       decimals: 18,
-      logoURI: "https://cryptologos.cc/logos/multi-collateral-dai-dai-logo.svg"
+      logoURI: "/tokens/DAI.svg"
     },
     LINK: {
       name: "Chainlink Token",
@@ -69,7 +69,7 @@ const TokenFaucet: React.FC = () => {
       color: "#375BD2",
       icon: "🔗",
       decimals: 18,
-      logoURI: "https://cryptologos.cc/logos/chainlink-link-logo.svg"
+      logoURI: "/tokens/LINK.svg"
     }
   };
 
@@ -323,8 +323,8 @@ const TokenFaucet: React.FC = () => {
           <div className="absolute top-6 left-6">
             <div className="w-12 h-12">
               <div className="w-12 h-12 flex items-center justify-center rounded-lg" style={{ backgroundColor: COLORS.darkBackground }}>
-                <div style={{ color: COLORS.baseGreen, fontSize: '24px' }}>
-                  <Image src="/icon.svg" alt="LendBit Logo" width={24} height={24} />
+                <div style={{ color: COLORS.baseGreen, fontSize: '48px' }}>
+                  <Image src="/logoW.png" alt="LendBit Logo" width={48} height={48} className="p-2"/>
                 </div>
               </div>
             </div>
@@ -366,7 +366,7 @@ const TokenFaucet: React.FC = () => {
                     // ringColor: chainInfo.color
                   }}
                 >
-                  <span className="text-xl mb-1">{chainInfo.icon}</span>
+                  <Image src={chainInfo.icon} alt="Chain Logo" width={32} height={32} className="mb-2"/>
                   <span className="text-xs font-medium" style={{ color: COLORS.lightText }}>
                     {chainInfo.name}
                   </span>
@@ -452,7 +452,8 @@ const TokenFaucet: React.FC = () => {
                       color: details.color
                     }}
                   >
-                    <span className="text-xl">{details.icon}</span>
+                    {/*<span className="text-xl">{details.icon}</span>*/}
+                    <Image src={details.logoURI} alt="Token Icon" width={32} height={32} />
                   </div>
                   <div className="text-left">
                     <p className="font-medium text-lg" style={{ color: COLORS.lightText }}>
@@ -532,7 +533,9 @@ const TokenFaucet: React.FC = () => {
                   color: '#2775CA'
                 }}
               >
-                <span className="text-xl">💵</span>
+
+                  <Image src="/tokens/USDC.svg" alt="USDC Logo" width={24} height={24} />
+
               </div>
               <div className="text-left">
                 <p className="font-medium text-lg" style={{ color: COLORS.lightText }}>

@@ -6,8 +6,8 @@ export default function Home() {
     <div className="min-h-screen py-12 px-4 flex flex-col items-center justify-center">
       <Head>
         <title>LendBit Testnet Faucet</title>
+          <link rel="icon" type="image/png" href="/logo.png" />
         <meta name="description" content="Get testnet tokens for LendBit" />
-        <link rel="icon" href="/icon.svg" />
       </Head>
 
       <main className="w-full">

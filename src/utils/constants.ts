@@ -87,17 +87,17 @@ export const TOKENS: Record<string, TokenInfo> = {
  export const SUPPORTED_CHAINS: Record<Chain, ChainInfo> = {
   'base_sepolia': {
     name: 'Base Sepolia',
-    icon: '🔵',
+    icon: '/chains/base.svg',
     color: '#0052FF'
   },
   'arbitrum_sepolia': {
     name: 'Arbitrum Sepolia', 
-    icon: '🔶',
+    icon: '/chains/arb.svg',
     color: '#12AAFF'
   },
   'optimism_sepolia': {
     name: 'Optimism Sepolia',
-    icon: '🔴', 
+    icon: '/chains/op.svg',
     color: '#FF0420'
   }
 };
